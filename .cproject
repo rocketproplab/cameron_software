@@ -36,10 +36,10 @@
 							<tool command="arm-atollic-eabi-gcc -c " commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG}${OUTPUT_PREFIX} ${OUTPUT} ${INPUTS}" id="com.atollic.truestudio.exe.debug.toolchain.gcc.1836874447" name="C Compiler" superClass="com.atollic.truestudio.exe.debug.toolchain.gcc">
 								<option id="com.atollic.truestudio.gcc.directories.select.330946435" name="Include path" superClass="com.atollic.truestudio.gcc.directories.select" valueType="includePath">
                   <listOptionValue builtIn="false" value="../Inc" />
-                  <listOptionValue builtIn="false" value="/home/j/STM32Cube/Repository/STM32Cube_FW_F4_V1.19.0/Drivers/STM32F4xx_HAL_Driver/Inc" />
-                  <listOptionValue builtIn="false" value="/home/j/STM32Cube/Repository/STM32Cube_FW_F4_V1.19.0/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy" />
-                  <listOptionValue builtIn="false" value="/home/j/STM32Cube/Repository/STM32Cube_FW_F4_V1.19.0/Drivers/CMSIS/Device/ST/STM32F4xx/Include" />
-                  <listOptionValue builtIn="false" value="/home/j/STM32Cube/Repository/STM32Cube_FW_F4_V1.19.0/Drivers/CMSIS/Include" />
+                  <listOptionValue builtIn="false" value="../Drivers/STM32F4xx_HAL_Driver/Inc" />
+                  <listOptionValue builtIn="false" value="../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy" />
+                  <listOptionValue builtIn="false" value="../Drivers/CMSIS/Device/ST/STM32F4xx/Include" />
+                  <listOptionValue builtIn="false" value="../Drivers/CMSIS/Include" />
                 </option>
 								<option id="com.atollic.truestudio.gcc.symbols.defined.1670122205" name="Defined symbols" superClass="com.atollic.truestudio.gcc.symbols.defined" valueType="definedSymbols">
                   <listOptionValue builtIn="false" value="__weak=&quot;__attribute__((weak))&quot;" />
@@ -154,10 +154,10 @@
 							<tool command="arm-atollic-eabi-gcc -c " commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG}${OUTPUT_PREFIX} ${OUTPUT} ${INPUTS}" id="com.atollic.truestudio.exe.release.toolchain.gcc.1836874447" name="C Compiler" superClass="com.atollic.truestudio.exe.release.toolchain.gcc">
 								<option id="com.atollic.truestudio.gcc.directories.select.330946435" name="Include path" superClass="com.atollic.truestudio.gcc.directories.select" valueType="includePath">
                   <listOptionValue builtIn="false" value="../Inc" />
-                  <listOptionValue builtIn="false" value="/home/j/STM32Cube/Repository/STM32Cube_FW_F4_V1.19.0/Drivers/STM32F4xx_HAL_Driver/Inc" />
-                  <listOptionValue builtIn="false" value="/home/j/STM32Cube/Repository/STM32Cube_FW_F4_V1.19.0/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy" />
-                  <listOptionValue builtIn="false" value="/home/j/STM32Cube/Repository/STM32Cube_FW_F4_V1.19.0/Drivers/CMSIS/Device/ST/STM32F4xx/Include" />
-                  <listOptionValue builtIn="false" value="/home/j/STM32Cube/Repository/STM32Cube_FW_F4_V1.19.0/Drivers/CMSIS/Include" />
+                  <listOptionValue builtIn="false" value="../Drivers/STM32F4xx_HAL_Driver/Inc" />
+                  <listOptionValue builtIn="false" value="../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy" />
+                  <listOptionValue builtIn="false" value="../Drivers/CMSIS/Device/ST/STM32F4xx/Include" />
+                  <listOptionValue builtIn="false" value="../Drivers/CMSIS/Include" />
                 </option>
 								<option id="com.atollic.truestudio.gcc.symbols.defined.1670122205" name="Defined symbols" superClass="com.atollic.truestudio.gcc.symbols.defined" valueType="definedSymbols">
                   <listOptionValue builtIn="false" value="__weak=&quot;__attribute__((weak))&quot;" />
