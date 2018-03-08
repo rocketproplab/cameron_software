@@ -176,6 +176,183 @@ void SystemClock_Config(void)
 
 /* USER CODE BEGIN 4 */
 
+
+void SPI1_send(uint8_t *pData, uint16_t Size, uint32_t Timeout)
+{
+	// With the pin being put to "GPIO_PIN_RESET" or 0, the chip is selected
+	// to be written to.
+	HAL_GPIO_WritePin(SPI1_CS_GPIO_Port, SPI1_CS_Pin, GPIO_PIN_RESET);
+
+
+	HAL_SPI_Transmit(&hspi1, (uint8_t*)(pData), Size, Timeout);
+	// Waits until the SPI bus is not busy
+	while(HAL_SPI_GetState(&hspi1) == HAL_SPI_STATE_BUSY);
+
+	// Sets the CS pin to high, which deselects it
+	HAL_GPIO_WritePin(SPI1_CS_GPIO_Port, SPI1_CS_Pin, GPIO_PIN_SET);
+}
+
+void SPI1_receive(uint8_t *pData, uint16_t Size, uint32_t Timeout)
+{
+	// With the pin being put to "GPIO_PIN_RESET" or 0, the chip is selected
+	// to be written to.
+	HAL_GPIO_WritePin(SPI1_CS_GPIO_Port, SPI1_CS_Pin, GPIO_PIN_RESET);
+
+
+	HAL_SPI_Receive(&hspi1, pData, Size, Timeout);
+
+	// Waits until the SPI bus is not busy
+	while(HAL_SPI_GetState(&hspi1) == HAL_SPI_STATE_BUSY);
+
+	// Sets the CS pin to high, which deselects it
+	HAL_GPIO_WritePin(SPI1_CS_GPIO_Port, SPI1_CS_Pin, GPIO_PIN_SET);
+
+}
+
+void SPI1_send_receive(uint8_t *pTxData, uint8_t *pRxData, uint16_t Size, uint32_t Timeout)
+{
+	// With the pin being put to "GPIO_PIN_RESET" or 0, the chip is selected
+	// to be written to.
+	HAL_GPIO_WritePin(SPI1_CS_GPIO_Port, SPI1_CS_Pin, GPIO_PIN_RESET);
+
+
+	HAL_SPI_TransmitReceive(&hspi1, pTxData, pRxData, Size, Timeout);
+
+	// Waits until the SPI bus is not busy
+	while(HAL_SPI_GetState(&hspi1) == HAL_SPI_STATE_BUSY);
+
+	// Sets the CS pin to high, which deselects it
+	HAL_GPIO_WritePin(SPI1_CS_GPIO_Port, SPI1_CS_Pin, GPIO_PIN_SET);
+
+}
+
+void SPI1_send_XBee(uint8_t frame_Type, uint8_t *pData, uint16_t Size, uint32_t Timeout)
+{
+	// With the pin being put to "GPIO_PIN_RESET" or 0, the chip is selected
+	// to be written to.
+	HAL_GPIO_WritePin(SPI1_CS_GPIO_Port, SPI1_CS_Pin, GPIO_PIN_RESET);
+
+
+	HAL_SPI_Transmit(&hspi1, (uint8_t*)(pData), Size, Timeout);
+	uint8_t  packetHeader[4];
+	uint8_t checkSum_byte;
+
+
+	// Calculates the checksum of the data sent
+	for(uint16_t i = 0; i < Size; i++)
+	{
+		checkSum_byte += pData[i];
+	}
+	checkSum_byte = 0xFF - checkSum_byte;
+
+
+	packetHeader[0] = 0x7E; 					  // Starting delimiter of packet
+	packetHeader[1] = (((Size + 1) >> 8) & 0xFF); // Honestly don't know what these do, but its the length of MSB
+	packetHeader[2] = ((Size + 1) & 0xFF); 		  // Honestly don't know what these do, but its the length of LSB
+	packetHeader[3] = frame_Type;			 	  // API frame type
+
+
+	// Write the header of the SPI packet
+	HAL_SPI_Transmit(&hspi1, (uint8_t*)(packetHeader), Size, Timeout);
+		// Waits until the SPI bus is not busy
+	while(HAL_SPI_GetState(&hspi1) == HAL_SPI_STATE_BUSY);
+
+
+	// Writes the actual data of the SPI packet
+	HAL_SPI_Transmit(&hspi1, (uint8_t*)(pData), Size, Timeout);
+	// Waits until the SPI bus is not busy
+	while(HAL_SPI_GetState(&hspi1) == HAL_SPI_STATE_BUSY);
+
+
+	// Writes the checksum byte of the SPI packet
+	HAL_SPI_Transmit(&hspi1, (uint8_t*)(&checkSum_byte), Size, Timeout);
+	// Waits until the SPI bus is not busy
+	while(HAL_SPI_GetState(&hspi1) == HAL_SPI_STATE_BUSY);
+
+
+	// Sets the CS pin to high, which deselects it
+	HAL_GPIO_WritePin(SPI1_CS_GPIO_Port, SPI1_CS_Pin, GPIO_PIN_SET);
+}
+
+
+void SPI1_send_XBee_Packet(uint8_t frame_Type, uint64_t xbee_Dest_Addr, uint8_t *pData, uint16_t data_Size, uint32_t Timeout)
+{
+	// With the pin being put to "GPIO_PIN_RESET" or 0, the chip is selected
+	// to be written to.
+	HAL_GPIO_WritePin(SPI1_CS_GPIO_Port, SPI1_CS_Pin, GPIO_PIN_RESET);
+
+
+//	HAL_SPI_Transmit(&hspi1, (uint8_t*)(pData), Size, Timeout);
+
+	const uint8_t PACKET_HEADER_SIZE = 17;
+
+	uint8_t total_packet_size;
+	uint8_t packetHeader[PACKET_HEADER_SIZE];
+	uint8_t checkSum_byte;
+	const uint8_t frameID = 0x01;
+	const uint16_t xbee_Dest_Addr_16bit = 0xFFFE; // Send to 0xFFFE for unknown 16 bit addr
+	const uint8_t broadcast_radius = 0x00;
+	const uint8_t options = 0x00;
+
+//	uint8_t * api_Packet;
+
+	/*api_Packet = (uint8_t *) malloc(4 * sizeof(uint8_t) + sizeof(checkSum_byte) +
+									sizeof(frameID) + sizeof(xbee_Dest_Addr_16bit) +
+									sizeof(max_hops) + sizeof(options) + Size);*/
+
+	total_packet_size = data_Size + PACKET_HEADER_SIZE; // Adds the API header size to the size of just the data to transmit
+
+
+	// TODO change data size to reflect the MSB and LSB of the packet data between length and checksum
+
+
+	packetHeader[0] = 0x7E; 					  		// Starting delimiter of packet for XBee API
+	packetHeader[1] = (((data_Size + 1) >> 8) & 0xFF);  // Honestly don't know what these do, but its the length of MSB
+	packetHeader[2] = ((data_Size + 1) & 0xFF); 		// Honestly don't know what these do, but its the length of LSB
+	packetHeader[3] = frame_Type;			 	  		// API frame type
+
+	packetHeader[4] = frameID;
+
+	for(uint8_t i = 0; i < 8; i++)
+	{
+		// Converts 64 bit integer to 8, 8 bit integers
+		packetHeader[i + 5] =  *((uint8_t *) (&xbee_Dest_Addr) + sizeof(uint8_t) * i);
+	}
+
+	packetHeader[13] = *((uint8_t *) (& xbee_Dest_Addr_16bit));
+	packetHeader[14] = *((uint8_t *) (& xbee_Dest_Addr_16bit) + sizeof(uint8_t));
+	packetHeader[15] = broadcast_radius;
+	packetHeader[16] = options;
+
+	// Calculates the checksum of the data sent
+	for(uint16_t i = 3; i < (total_packet_size - 1); i++)
+	{
+		checkSum_byte += pData[i];
+	}
+	checkSum_byte = 0xFF - checkSum_byte;
+
+	// Write the header of the SPI packet
+	HAL_SPI_Transmit(&hspi1, (uint8_t*)(packetHeader), PACKET_HEADER_SIZE, Timeout);
+		// Waits until the SPI bus is not busy
+	while(HAL_SPI_GetState(&hspi1) == HAL_SPI_STATE_BUSY);
+
+
+	// Writes the actual data of the SPI packet
+	HAL_SPI_Transmit(&hspi1, (uint8_t*)(pData), data_Size, Timeout);
+	// Waits until the SPI bus is not busy
+	while(HAL_SPI_GetState(&hspi1) == HAL_SPI_STATE_BUSY);
+
+
+	// Writes the checksum byte of the SPI packet
+	HAL_SPI_Transmit(&hspi1, (uint8_t*)(&checkSum_byte), 1, Timeout);
+	// Waits until the SPI bus is not busy
+	while(HAL_SPI_GetState(&hspi1) == HAL_SPI_STATE_BUSY);
+
+
+	// Sets the CS pin to high, which deselects it
+	HAL_GPIO_WritePin(SPI1_CS_GPIO_Port, SPI1_CS_Pin, GPIO_PIN_SET);
+}
+
 /* USER CODE END 4 */
 
 /**
