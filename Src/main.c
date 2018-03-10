@@ -182,6 +182,8 @@ void SystemClock_Config(void)
 
 /* USER CODE BEGIN 4 */
 
+
+
 void SPI3_send(uint8_t *pData, uint16_t Size, uint32_t Timeout)
 {
 	// With the pin being put to "GPIO_PIN_RESET" or 0, the chip is selected
@@ -255,6 +257,30 @@ void SPI1_send_receive(uint8_t *pTxData, uint8_t *pRxData, uint16_t Size, uint32
 
 	// Sets the CS pin to high, which deselects it
 	//HAL_GPIO_WritePin(SPI1_CS_GPIO_Port, SPI1_CS_Pin, GPIO_PIN_SET);
+
+}
+
+void read_PT(uint8_t *rxBuf, uint32_t timeout, uint8_t pt_choice)
+{
+	//Select PT ADC
+	HAL_GPIO_WritePin(PT_CS_GPIO_Port, PT_CS_Pin, GPIO_PIN_SET);
+
+	//configure ADC to output select
+	uint8_t configure = 0x01;
+	SPI1_send(&configure, (uint16_t)1, timeout);
+
+	//select analog input
+	uint16_t choice_mask = 0x0410;
+	choice_mask = choice_mask & (uint16_t)pt_choice;
+	SPI1_send((uint8_t)&choice_mask, (uint16_t)2, timeout);
+
+	//configure ADC to read input
+	uint8_t configure = 0x58;
+	SPI1_send(&configure, (uint16_t)1, timeout);
+
+	//read from data register
+	SPI1_receive(rxBuf, (uint16_t)3, timeout);
+
 
 }
 
