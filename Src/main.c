@@ -262,8 +262,8 @@ void SPI1_send_receive(uint8_t *pTxData, uint8_t *pRxData, uint16_t Size, uint32
 
 void read_PT(uint8_t *rxBuf, uint32_t timeout, uint8_t pt_choice)
 {
-	//Select PT ADC
-	HAL_GPIO_WritePin(PT_CS_GPIO_Port, PT_CS_Pin, GPIO_PIN_SET);
+	//Select PT ADC, sets the pin to low, as the ADC chip select is active low
+	HAL_GPIO_WritePin(PT_CS_GPIO_Port, PT_CS_Pin, GPIO_PIN_RESET);
 
 	//configure ADC to output select
 	uint8_t configure = 0x01;
@@ -281,7 +281,8 @@ void read_PT(uint8_t *rxBuf, uint32_t timeout, uint8_t pt_choice)
 	//read from data register
 	SPI1_receive(rxBuf, (uint16_t)3, timeout);
 
-
+	// Deselect PT ADC, sets the pin to high
+	HAL_GPIO_WritePin(PT_CS_GPIO_Port, PT_CS_Pin, GPIO_PIN_SET);
 }
 
 void SPI1_send_XBee(uint8_t frame_Type, uint8_t *pData, uint16_t Size, uint32_t Timeout)
