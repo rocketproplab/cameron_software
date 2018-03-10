@@ -103,7 +103,7 @@ int main(void)
 
   uint16_t TX_BUF_SIZE = 24;
   uint16_t RX_BUF_SIZE = 24;
-  uint32_t timeout =
+  uint32_t timeout = 10000;
 
   uint8_t txBuf[TX_BUF_SIZE];
   uint8_t rxBuf[RX_BUF_SIZE];
@@ -213,7 +213,7 @@ void SPI1_send(uint8_t *pData, uint16_t Size, uint32_t Timeout)
 {
 	// With the pin being put to "GPIO_PIN_RESET" or 0, the chip is selected
 	// to be written to.
-	HAL_GPIO_WritePin(SPI1_CS_GPIO_Port, SPI1_CS_Pin, GPIO_PIN_RESET);
+	//HAL_GPIO_WritePin(SPI1_CS_GPIO_Port, SPI1_CS_Pin, GPIO_PIN_RESET);
 
 
 	HAL_SPI_Transmit(&hspi1, (uint8_t*)(pData), Size, Timeout);
@@ -221,14 +221,14 @@ void SPI1_send(uint8_t *pData, uint16_t Size, uint32_t Timeout)
 	while(HAL_SPI_GetState(&hspi1) == HAL_SPI_STATE_BUSY);
 
 	// Sets the CS pin to high, which deselects it
-	HAL_GPIO_WritePin(SPI1_CS_GPIO_Port, SPI1_CS_Pin, GPIO_PIN_SET);
+	//HAL_GPIO_WritePin(SPI1_CS_GPIO_Port, SPI1_CS_Pin, GPIO_PIN_SET);
 }
 
 void SPI1_receive(uint8_t *pData, uint16_t Size, uint32_t Timeout)
 {
 	// With the pin being put to "GPIO_PIN_RESET" or 0, the chip is selected
 	// to be written to.
-	HAL_GPIO_WritePin(SPI1_CS_GPIO_Port, SPI1_CS_Pin, GPIO_PIN_RESET);
+	//HAL_GPIO_WritePin(SPI1_CS_GPIO_Port, SPI1_CS_Pin, GPIO_PIN_RESET);
 
 
 	HAL_SPI_Receive(&hspi1, pData, Size, Timeout);
@@ -237,7 +237,7 @@ void SPI1_receive(uint8_t *pData, uint16_t Size, uint32_t Timeout)
 	while(HAL_SPI_GetState(&hspi1) == HAL_SPI_STATE_BUSY);
 
 	// Sets the CS pin to high, which deselects it
-	HAL_GPIO_WritePin(SPI1_CS_GPIO_Port, SPI1_CS_Pin, GPIO_PIN_SET);
+	//HAL_GPIO_WritePin(SPI1_CS_GPIO_Port, SPI1_CS_Pin, GPIO_PIN_SET);
 
 }
 
@@ -245,7 +245,7 @@ void SPI1_send_receive(uint8_t *pTxData, uint8_t *pRxData, uint16_t Size, uint32
 {
 	// With the pin being put to "GPIO_PIN_RESET" or 0, the chip is selected
 	// to be written to.
-	HAL_GPIO_WritePin(SPI1_CS_GPIO_Port, SPI1_CS_Pin, GPIO_PIN_RESET);
+	//HAL_GPIO_WritePin(SPI1_CS_GPIO_Port, SPI1_CS_Pin, GPIO_PIN_RESET);
 
 
 	HAL_SPI_TransmitReceive(&hspi1, pTxData, pRxData, Size, Timeout);
@@ -254,7 +254,7 @@ void SPI1_send_receive(uint8_t *pTxData, uint8_t *pRxData, uint16_t Size, uint32
 	while(HAL_SPI_GetState(&hspi1) == HAL_SPI_STATE_BUSY);
 
 	// Sets the CS pin to high, which deselects it
-	HAL_GPIO_WritePin(SPI1_CS_GPIO_Port, SPI1_CS_Pin, GPIO_PIN_SET);
+	//HAL_GPIO_WritePin(SPI1_CS_GPIO_Port, SPI1_CS_Pin, GPIO_PIN_SET);
 
 }
 
@@ -262,7 +262,7 @@ void SPI1_send_XBee(uint8_t frame_Type, uint8_t *pData, uint16_t Size, uint32_t 
 {
 	// With the pin being put to "GPIO_PIN_RESET" or 0, the chip is selected
 	// to be written to.
-	HAL_GPIO_WritePin(SPI1_CS_GPIO_Port, SPI1_CS_Pin, GPIO_PIN_RESET);
+	//HAL_GPIO_WritePin(SPI1_CS_GPIO_Port, SPI1_CS_Pin, GPIO_PIN_RESET);
 
 
 	HAL_SPI_Transmit(&hspi1, (uint8_t*)(pData), Size, Timeout);
@@ -303,7 +303,7 @@ void SPI1_send_XBee(uint8_t frame_Type, uint8_t *pData, uint16_t Size, uint32_t 
 
 
 	// Sets the CS pin to high, which deselects it
-	HAL_GPIO_WritePin(SPI1_CS_GPIO_Port, SPI1_CS_Pin, GPIO_PIN_SET);
+	//HAL_GPIO_WritePin(SPI1_CS_GPIO_Port, SPI1_CS_Pin, GPIO_PIN_SET);
 }
 
 
@@ -311,7 +311,7 @@ void SPI1_send_XBee_Packet(uint8_t frame_Type, uint64_t xbee_Dest_Addr, uint8_t 
 {
 	// With the pin being put to "GPIO_PIN_RESET" or 0, the chip is selected
 	// to be written to.
-	HAL_GPIO_WritePin(SPI1_CS_GPIO_Port, SPI1_CS_Pin, GPIO_PIN_RESET);
+	//HAL_GPIO_WritePin(SPI1_CS_GPIO_Port, SPI1_CS_Pin, GPIO_PIN_RESET);
 
 
 //	HAL_SPI_Transmit(&hspi1, (uint8_t*)(pData), Size, Timeout);
@@ -382,7 +382,7 @@ void SPI1_send_XBee_Packet(uint8_t frame_Type, uint64_t xbee_Dest_Addr, uint8_t 
 
 
 	// Sets the CS pin to high, which deselects it
-	HAL_GPIO_WritePin(SPI1_CS_GPIO_Port, SPI1_CS_Pin, GPIO_PIN_SET);
+	//HAL_GPIO_WritePin(SPI1_CS_GPIO_Port, SPI1_CS_Pin, GPIO_PIN_SET);
 }
 
 /* USER CODE END 4 */
