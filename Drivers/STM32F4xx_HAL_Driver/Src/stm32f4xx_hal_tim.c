@@ -136,8 +136,6 @@
   * @{
   */
 
-#define HAL_TIM_MODULE_ENABLED
-
 #ifdef HAL_TIM_MODULE_ENABLED
 
 /* Private typedef -----------------------------------------------------------*/
