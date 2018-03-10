@@ -40,6 +40,7 @@
 #include "stm32f4xx_hal.h"
 #include "i2c.h"
 #include "spi.h"
+#include "tim.h"
 #include "usart.h"
 #include "gpio.h"
 
@@ -99,14 +100,10 @@ int main(void)
   MX_SPI1_Init();
   MX_SPI3_Init();
   MX_USART2_UART_Init();
+  MX_TIM11_Init();
+  MX_TIM7_Init();
   /* USER CODE BEGIN 2 */
 
-  uint16_t TX_BUF_SIZE = 24;
-  uint16_t RX_BUF_SIZE = 24;
-  uint32_t timeout =
-
-  uint8_t txBuf[TX_BUF_SIZE];
-  uint8_t rxBuf[RX_BUF_SIZE];
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -181,32 +178,6 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-
-void SPI3_send(uint8_t *pData, uint16_t Size, uint32_t Timeout)
-{
-	// With the pin being put to "GPIO_PIN_RESET" or 0, the chip is selected
-	// to be written to.
-	while(HAL_SPI_GetState(&hspi3) == HAL_SPI_STATE_READY);
-
-
-	HAL_SPI_Transmit(&hspi3, (uint8_t*)(pData), Size, Timeout);
-	// Waits until the SPI bus is not busy
-
-}
-
-void SPI3_receive(uint8_t *pData, uint16_t Size, uint32_t Timeout)
-{
-	// With the pin being put to "GPIO_PIN_RESET" or 0, the chip is selected
-	// to be written to.
-	while(HAL_SPI_GetState(&hspi3) == HAL_SPI_STATE_READY);
-
-
-	HAL_SPI_Receive(&hspi3, pData, Size, Timeout);
-
-	// Waits until the SPI bus is not busy
-
-
-}
 
 
 void SPI1_send(uint8_t *pData, uint16_t Size, uint32_t Timeout)
