@@ -260,6 +260,50 @@ void SPI1_send_receive(uint8_t *pTxData, uint8_t *pRxData, uint16_t Size, uint32
 
 }
 
+void read_TC_1(uint8_t *rxBuf, uint32_t timeout)
+{
+	HAL_GPIO_WritePin(TC_CS1_GPIO_Port, TC_CS1_Pin, GPIO_PIN_RESET);
+	//requires 32 bit buffer
+	//rxBuf[31] is sign bit, rxBuf[30:18] are TC temperature(signed value)
+	//rxBuf[15:4] is reference voltage
+	SPI1_receive(rxBuf, (uint16_t)4, timeout);
+
+	HAL_GPIO_WritePin(TC_CS1_GPIO_Port, TC_CS1_Pin, GPIO_PIN_SET);
+}
+
+void read_TC_2(uint8_t *rxBuf, uint32_t timeout)
+{
+	HAL_GPIO_WritePin(TC_CS2_GPIO_Port, TC_CS2_Pin, GPIO_PIN_RESET);
+	//requires 32 bit buffer
+	//rxBuf[31] is sign bit, rxBuf[30:18] are TC temperature(signed value)
+	//rxBuf[15:4] is reference voltage
+	SPI1_receive(rxBuf, (uint16_t)4, timeout);
+
+	HAL_GPIO_WritePin(TC_CS2_GPIO_Port, TC_CS2_Pin, GPIO_PIN_SET);
+}
+
+void read_TC_3(uint8_t *rxBuf, uint32_t timeout)
+{
+	HAL_GPIO_WritePin(TC_CS3_GPIO_Port, TC_CS3_Pin, GPIO_PIN_RESET);
+	//requires 32 bit buffer
+	//rxBuf[31] is sign bit, rxBuf[30:18] are TC temperature(signed value)
+	//rxBuf[15:4] is reference voltage
+	SPI1_receive(rxBuf, (uint16_t)4, timeout);
+
+	HAL_GPIO_WritePin(TC_CS3_GPIO_Port, TC_CS3_Pin, GPIO_PIN_SET);
+}
+
+void read_TC_4(uint8_t *rxBuf, uint32_t timeout)
+{
+	HAL_GPIO_WritePin(TC_CS4_GPIO_Port, TC_CS4_Pin, GPIO_PIN_RESET);
+	//requires 32 bit buffer
+	//rxBuf[31] is sign bit, rxBuf[30:18] are TC temperature(signed value)
+	//rxBuf[15:4] is reference voltage
+	SPI1_receive(rxBuf, (uint16_t)4, timeout);
+
+	HAL_GPIO_WritePin(TC_CS4_GPIO_Port, TC_CS4_Pin, GPIO_PIN_SET);
+}
+
 void read_PT(uint8_t *rxBuf, uint32_t timeout, uint8_t pt_choice)
 {
 	//Select PT ADC, sets the pin to low, as the ADC chip select is active low
@@ -283,6 +327,51 @@ void read_PT(uint8_t *rxBuf, uint32_t timeout, uint8_t pt_choice)
 
 	// Deselect PT ADC, sets the pin to high
 	HAL_GPIO_WritePin(PT_CS_GPIO_Port, PT_CS_Pin, GPIO_PIN_SET);
+}
+
+void open_solenoid(uint32_t solenoid)
+{
+	switch(solenoid){
+	case 1:
+		HAL_GPIO_WritePin(SOL_OUT1_GPIO_Port, SOL_OUT1_Pin, GPIO_PIN_SET);
+		break;
+	case 2:
+		HAL_GPIO_WritePin(SOL_OUT2_GPIO_Port, SOL_OUT2_Pin, GPIO_PIN_SET);
+		break;
+	case 3:
+		HAL_GPIO_WritePin(SOL_OUT3_GPIO_Port, SOL_OUT3_Pin, GPIO_PIN_SET);
+		break;
+	case 4:
+		HAL_GPIO_WritePin(SOL_OUT4_GPIO_Port, SOL_OUT4_Pin, GPIO_PIN_SET);
+		break;
+	case 5:
+		HAL_GPIO_WritePin(SOL_OUT5_GPIO_Port, SOL_OUT5_Pin, GPIO_PIN_SET);
+		break;
+	default:
+	}
+
+}
+
+void close_solenoid(uint32_t solenoid)
+{
+	switch(solenoid){
+		case 1:
+			HAL_GPIO_WritePin(SOL_OUT1_GPIO_Port, SOL_OUT1_Pin, GPIO_PIN_RESET);
+			break;
+		case 2:
+			HAL_GPIO_WritePin(SOL_OUT2_GPIO_Port, SOL_OUT2_Pin, GPIO_PIN_RESET);
+			break;
+		case 3:
+			HAL_GPIO_WritePin(SOL_OUT3_GPIO_Port, SOL_OUT3_Pin, GPIO_PIN_RESET);
+			break;
+		case 4:
+			HAL_GPIO_WritePin(SOL_OUT4_GPIO_Port, SOL_OUT4_Pin, GPIO_PIN_RESET);
+			break;
+		case 5:
+			HAL_GPIO_WritePin(SOL_OUT5_GPIO_Port, SOL_OUT5_Pin, GPIO_PIN_RESET);
+			break;
+		default:
+		}
 }
 
 void SPI1_send_XBee(uint8_t frame_Type, uint8_t *pData, uint16_t Size, uint32_t Timeout)
